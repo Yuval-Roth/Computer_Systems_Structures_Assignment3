@@ -99,7 +99,6 @@ namespace SimpleCompiler
                 ch = 0;
 
                 //line is a comment
-
                 if (line.Contains("//"))
                 {
                     ln++;
