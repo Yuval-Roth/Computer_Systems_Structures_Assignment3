@@ -95,19 +95,23 @@ namespace SimpleCompiler
             int ch = 0;
             foreach(string lineRaw in lCodeLines)
             {
-                string line = lineRaw.Replace("\t", "    ");
+                string line = lineRaw;
                 ch = 0;
 
                 //line is a comment
 
-                if (line.Contains("//")) continue;
+                if (line.Contains("//"))
+                {
+                    ln++;
+                    continue;
+                } 
 
                 Console.WriteLine("   Original line: "+line);
                     Console.Write("Interpreted line: ");
 
 
                 char[] delimitors = {
-                    ' ',',',';','\''
+                    '\t',' ',',',';','\''
                     ,'(', ')', '{', '}',
                     '[',']', '*', '+',
                     '-', '/', '<', '>',
@@ -120,7 +124,7 @@ namespace SimpleCompiler
                 {
                     line = Next(line, delimitors, out token, out cChars);
                     if (Token.Statements.Contains(token)) lTokens.Add(new Statement(token, ln, ch));
-                    else if (token == " ") { }
+                    else if (token == " " | token == "\t") { }
                     else if (Token.VarTypes.Contains(token)) lTokens.Add(new VarType(token, ln, ch));
                     else if (cChars == 1 && Token.Separators.Contains(token[0])) lTokens.Add(new Separator(token[0], ln, ch));
                     else if (cChars == 1 && Token.Parentheses.Contains(token[0])) lTokens.Add(new Parentheses(token[0], ln, ch));
@@ -166,6 +170,7 @@ namespace SimpleCompiler
                     ch += cChars;
                     Console.Write(token);
                 }
+                ln++;
                 Console.WriteLine();
                 Console.WriteLine("================================================================");
             }

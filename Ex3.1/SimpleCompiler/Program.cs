@@ -78,12 +78,15 @@ namespace SimpleCompiler
 
         static void Main(string[] args)
         {
-            //Test1();
-            Test2();
-            //Test3();
-            //Test4();
 
-
+            if (Test1()) Console.WriteLine("\n================\nTest1 passed\n================");
+            else Console.WriteLine("\n================\nTest1 failed\n================");
+            if (Test2()) Console.WriteLine("\n================\nTest2 passed\n================");
+            else Console.WriteLine("\n================\nTest2 failed\n================");
+            if (Test3()) Console.WriteLine("\n================\nTest3 passed\n================");
+            else Console.WriteLine("\n================\nTest3 failed\n================");
+            if (Test4()) Console.WriteLine("\n================\nTest4 passed\n================");
+            else Console.WriteLine("\n================\nTest4 failed\n================");
         }
 
     }
