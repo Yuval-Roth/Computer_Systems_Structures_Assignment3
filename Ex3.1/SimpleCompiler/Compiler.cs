@@ -91,6 +91,14 @@ namespace SimpleCompiler
             List<Token> lTokens = new List<Token>();
             //your code here
 
+            char[] delimitors = {
+                '\t',' ',',',';','\''
+                ,'(', ')', '{', '}',
+                '[',']', '*', '+',
+                '-', '/', '<', '>',
+                '&', '=', '|', '!'
+            };
+
             int ln = 0;
             int ch = 0;
             foreach(string lineRaw in lCodeLines)
@@ -107,15 +115,6 @@ namespace SimpleCompiler
 
                 Console.WriteLine("   Original line: "+line);
                     Console.Write("Interpreted line: ");
-
-
-                char[] delimitors = {
-                    '\t',' ',',',';','\''
-                    ,'(', ')', '{', '}',
-                    '[',']', '*', '+',
-                    '-', '/', '<', '>',
-                    '&', '=', '|', '!'
-                };
 
                 string token = "";
                 int cChars = 0;
