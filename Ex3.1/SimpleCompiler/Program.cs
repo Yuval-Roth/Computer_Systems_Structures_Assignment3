@@ -12,7 +12,7 @@ namespace SimpleCompiler
         static bool Test1()
         {
             Compiler c = new Compiler();
-            List<string> lCodeLines = c.ReadFile(@"GCD.Jack");
+            List<string> lCodeLines = c.ReadFile(@"CodeFiles/GCD.Jack");
             List<Token> lTokens = c.Tokenize(lCodeLines);
             Token t = lTokens[0];
             if (t.ToString() != "function" || !(t is Statement))
@@ -30,7 +30,7 @@ namespace SimpleCompiler
             try
             {
                 Compiler c = new Compiler();
-                List<string> lCodeLines = c.ReadFile(@"GCDErr.Jack");
+                List<string> lCodeLines = c.ReadFile(@"CodeFiles/GCDErr.Jack");
                 List<Token> lTokens = c.Tokenize(lCodeLines);
             }
             catch (SyntaxErrorException e)
@@ -43,7 +43,7 @@ namespace SimpleCompiler
         static bool Test2()
         {
             Compiler c = new Compiler();
-            List<string> lCodeLines = c.ReadFile(@"Fib.Jack");
+            List<string> lCodeLines = c.ReadFile(@"CodeFiles/Fib.Jack");
             List<Token> lTokens = c.Tokenize(lCodeLines);
             Token t = lTokens[0];
             if (t.ToString() != "function" || !(t is Statement))
@@ -60,7 +60,7 @@ namespace SimpleCompiler
         static bool Test3()
         {
             Compiler c = new Compiler();
-            List<string> lCodeLines = c.ReadFile(@"BinarySearch.Jack");
+            List<string> lCodeLines = c.ReadFile(@"CodeFiles/BinarySearch.Jack");
             List<Token> lTokens = c.Tokenize(lCodeLines);
             Token t = lTokens[0];
             if (t.ToString() != "function" || !(t is Statement))
@@ -78,10 +78,10 @@ namespace SimpleCompiler
 
         static void Main(string[] args)
         {
-            Test1();
+            //Test1();
             Test2();
-            Test3();
-            Test4();
+            //Test3();
+            //Test4();
 
 
         }

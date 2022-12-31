@@ -87,9 +87,88 @@ namespace SimpleCompiler
         //You also need to identify errors, in this assignement - illegal identifier names.
         public List<Token> Tokenize(List<string> lCodeLines)
         {
+
             List<Token> lTokens = new List<Token>();
             //your code here
-            
+
+            int ln = 0;
+            int ch = 0;
+            foreach(string lineRaw in lCodeLines)
+            {
+                string line = lineRaw.Replace("\t", "    ");
+                ch = 0;
+
+                //line is a comment
+
+                if (line.Contains("//")) continue;
+
+                Console.WriteLine("   Original line: "+line);
+                    Console.Write("Interpreted line: ");
+
+
+                char[] delimitors = {
+                    ' ',',',';','\''
+                    ,'(', ')', '{', '}',
+                    '[',']', '*', '+',
+                    '-', '/', '<', '>',
+                    '&', '=', '|', '!'
+                };
+
+                string token = "";
+                int cChars = 0;
+                while (line != "" & line != null)
+                {
+                    line = Next(line, delimitors, out token, out cChars);
+                    if (Token.Statements.Contains(token)) lTokens.Add(new Statement(token, ln, ch));
+                    else if (token == " ") { }
+                    else if (Token.VarTypes.Contains(token)) lTokens.Add(new VarType(token, ln, ch));
+                    else if (cChars == 1 && Token.Separators.Contains(token[0])) lTokens.Add(new Separator(token[0], ln, ch));
+                    else if (cChars == 1 && Token.Parentheses.Contains(token[0])) lTokens.Add(new Parentheses(token[0], ln, ch));
+                    else if (cChars == 1 && Token.Operators.Contains(token[0])) lTokens.Add(new Operator(token[0], ln, ch));
+                    else if (Token.Constants.Contains(token)) lTokens.Add(new Constant(token, ln, ch));
+                    
+                    //indentifiers and numbers
+                    else 
+                    {
+                        //is an identifier
+                        if ("0123456789".IndexOf(token[0]) == -1)
+                        {
+
+                            //checks for illegal characters
+                            foreach (char c in token)
+                            {
+                                if ("0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".IndexOf(c) == -1)
+                                {
+                                    throw new SyntaxErrorException("Error: Illegal identifier name: " + token, new Identifier(token, ln, ch));
+                                }
+                            }
+
+                            
+                            lTokens.Add(new Identifier(token, ln, ch));
+                        }
+
+                        //is potentially a number
+                        else
+                        {
+                            //checks if it's really a number
+                            foreach (char c in token)
+                            {
+                                if ("0123456789".IndexOf(c) == -1)
+                                {
+                                    throw new SyntaxErrorException("Error: Illegal identifier name: " + token, new Identifier(token, ln, ch));
+                                }
+                            }
+                            
+                            
+                            lTokens.Add(new Number(token, ln, ch));
+                        }      
+                    }
+                    ch += cChars;
+                    Console.Write(token);
+                }
+                Console.WriteLine();
+                Console.WriteLine("================================================================");
+            }
             return lTokens;
         }
 
