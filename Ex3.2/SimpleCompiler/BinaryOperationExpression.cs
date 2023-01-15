@@ -19,20 +19,29 @@ namespace SimpleCompiler
 
         public override void Parse(TokensStack sTokens)
         {
-            sTokens.Pop(); // (
-
+            Token t;
+            
+            t = sTokens.Pop(); // (
+            if (t is Parentheses == false || t.ToString() != "(")
+                throw new SyntaxErrorException("Expected (, received " + t, t);
             //operand 1
             Operand1 = Create(sTokens);
             Operand1.Parse(sTokens);
-            
+
             //operator
-            Operator = sTokens.Pop().ToString(); // Operator
+
+            t = sTokens.Pop(); // Operator
+            if (t is Operator == false)
+                throw new SyntaxErrorException("Expected operator, received " + t, t);
+            Operator = t.ToString();
             
             //operand 2
             Operand2 = Create(sTokens);
             Operand2.Parse(sTokens);
             
-            sTokens.Pop(); // )
+            t = sTokens.Pop(); // )
+            if (t is Parentheses == false || t.ToString() != ")")
+                throw new SyntaxErrorException("Expected ), received " + t, t);
         }
     }
 }
