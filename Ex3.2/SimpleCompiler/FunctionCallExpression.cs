@@ -15,7 +15,7 @@ namespace SimpleCompiler
             if (t is Identifier == false)
                 throw new SyntaxErrorException("Expected identifier, received " + t, t);
 
-            FunctionName = t.ToString();
+            FunctionName = t.ToString() //TODO use pattern matching and fix the functionName
 
             t = sTokens.Pop(); // (
             if (t is Parentheses == false || ((Parentheses)t).Name != '(')
