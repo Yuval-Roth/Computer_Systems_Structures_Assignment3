@@ -18,11 +18,11 @@ namespace SimpleCompiler
             FunctionName = t.ToString();
 
             t = sTokens.Pop(); // (
-            if (t is Parentheses == false || t.ToString() != "(")
+            if (t is Parentheses == false || ((Parentheses)t).Name != '(')
                 throw new SyntaxErrorException("Expected (, received " + t, t);
 
             Args = new List<Expression>();
-            while (sTokens.Peek() is Identifier || (sTokens.Peek() is Separator && sTokens.Peek().ToString() == ","))
+            while (sTokens.Peek() is Identifier || (sTokens.Peek() is Separator && ((Separator)sTokens.Peek()).Name == ','))
             {
                 if (sTokens.Peek() is Identifier)
                 {
@@ -37,7 +37,7 @@ namespace SimpleCompiler
             }
         
             t = sTokens.Pop(); // )
-            if (t is Parentheses == false || t.ToString() != ")")
+            if (t is Parentheses == false || ((Parentheses)t).Name != ')')
                 throw new SyntaxErrorException("Expected ), received " + t, t);
 
         }

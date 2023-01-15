@@ -22,7 +22,7 @@ namespace SimpleCompiler
             Token t;
             
             t = sTokens.Pop(); // (
-            if (t is Parentheses == false || t.ToString() != "(")
+            if (t is Parentheses == false || ((Parentheses)t).Name != '(')
                 throw new SyntaxErrorException("Expected (, received " + t, t);
             //operand 1
             Operand1 = Create(sTokens);
@@ -40,7 +40,7 @@ namespace SimpleCompiler
             Operand2.Parse(sTokens);
             
             t = sTokens.Pop(); // )
-            if (t is Parentheses == false || t.ToString() != ")")
+            if (t is Parentheses == false || ((Parentheses)t).Name != ')')
                 throw new SyntaxErrorException("Expected ), received " + t, t);
         }
     }
