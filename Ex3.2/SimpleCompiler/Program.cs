@@ -10,12 +10,10 @@ namespace SimpleCompiler
     class Program
     {
 
-
-
-
         static void Main(string[] args)
         {
-            TestParse();
+            Console.WriteLine("Test result: "+TestParse());
+            Console.ReadLine();
         }
 
 
@@ -45,10 +43,10 @@ namespace SimpleCompiler
 
         private static bool TestParse()
         {
-            try
-            {
+            //try
+            //{
                 Compiler sc = new Compiler();
-                List<string> lLines = sc.ReadFile(@"Program.Jack");
+                List<string> lLines = sc.ReadFile(@"Program2.Jack");
                 List<Token> lTokens = sc.Tokenize(lLines);
                 TokensStack sTokens = new TokensStack();
                 for (int i = lTokens.Count - 1; i >= 0; i--)
@@ -70,11 +68,11 @@ namespace SimpleCompiler
                     if(sAllTokens[i] != sAfterParsing[i])
                         return false;
                 return true;
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            //}
+            //catch(Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //}
             return false;
         }
     }

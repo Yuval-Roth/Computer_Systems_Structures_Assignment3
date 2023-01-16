@@ -37,10 +37,9 @@ namespace SimpleCompiler
 
             DoIfTrue = new List<StatetmentBase>();
             
-            while (sTokens.Peek() is Statement)
+            while (sTokens.Peek() is Statement s1)
             {
-                t = sTokens.Pop();
-                StatetmentBase s = Create(t);
+                StatetmentBase s = Create(s1);
                 s.Parse(sTokens);
                 DoIfTrue.Add(s);
             }

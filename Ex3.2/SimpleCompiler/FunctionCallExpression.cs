@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace SimpleCompiler
 {
@@ -12,33 +13,39 @@ namespace SimpleCompiler
         {
             Token t;
             t = sTokens.Pop(); // funcId
-            if (t is Identifier == false)
+            if (t is Identifier i1 == false)
                 throw new SyntaxErrorException("Expected identifier, received " + t, t);
 
-            FunctionName = t.ToString() //TODO use pattern matching and fix the functionName
-
+            FunctionName = i1.Name;
+            
             t = sTokens.Pop(); // (
-            if (t is Parentheses == false || ((Parentheses)t).Name != '(')
+            if (t is Parentheses p1 == false || p1.Name != '(')
                 throw new SyntaxErrorException("Expected (, received " + t, t);
 
             Args = new List<Expression>();
-            while (sTokens.Peek() is Identifier || (sTokens.Peek() is Separator && ((Separator)sTokens.Peek()).Name == ','))
+
+            Expression e = Create(sTokens);
+            e.Parse(sTokens);
+            Args.Add(e);
+
+            while (sTokens.Peek() is Separator s1 && s1.Name == ',') 
             {
-                if (sTokens.Peek() is Identifier)
-                {
-                    Expression e = Create(sTokens);
-                    e.Parse(sTokens);
-                    Args.Add(e);
-                }
-                else
-                {
-                    sTokens.Pop();
-                }
+                sTokens.Pop(); // pop the ,
+                e = Create(sTokens);
+                e.Parse(sTokens);
+                Args.Add(e);
             }
-        
+
             t = sTokens.Pop(); // )
-            if (t is Parentheses == false || ((Parentheses)t).Name != ')')
+            if (t is Parentheses p2 == false || p2.Name != ')')
                 throw new SyntaxErrorException("Expected ), received " + t, t);
+
+
+            // not sure this is needed here
+
+            //t = sTokens.Pop(); // ;
+            //if (t is Separator s2 == false || s2.Name != ';')
+            //    throw new SyntaxErrorException("Expected ;, received " + t, t);
 
         }
 

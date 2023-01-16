@@ -31,16 +31,16 @@ namespace SimpleCompiler
             //operator
 
             t = sTokens.Pop(); // Operator
-            if (t is Operator == false)
+            if (t is Operator o1 == false)
                 throw new SyntaxErrorException("Expected operator, received " + t, t);
-            Operator = t.ToString();
+            Operator = ""+o1.Name;
             
             //operand 2
             Operand2 = Create(sTokens);
             Operand2.Parse(sTokens);
             
             t = sTokens.Pop(); // )
-            if (t is Parentheses == false || ((Parentheses)t).Name != ')')
+            if (t is Parentheses p1 == false || p1.Name != ')')
                 throw new SyntaxErrorException("Expected ), received " + t, t);
         }
     }

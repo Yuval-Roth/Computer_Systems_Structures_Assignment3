@@ -18,8 +18,16 @@ namespace SimpleCompiler
 
         public override void Parse(TokensStack sTokens)
         {
-            throw new NotImplementedException();
+            Token t;
 
+            t = sTokens.Pop(); // Operator
+            if (t is Operator o1 == false)
+                throw new SyntaxErrorException("Expected operator, received " + t, t);
+
+            Operator = ""+o1.Name;
+
+            Operand = Create(sTokens);
+            Operand.Parse(sTokens);
         }
     }
 }

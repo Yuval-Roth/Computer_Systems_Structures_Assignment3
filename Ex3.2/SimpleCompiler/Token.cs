@@ -7,7 +7,7 @@ namespace SimpleCompiler
 {
     public class Token
     {
-        public static string[] Statements = { "function", "var", "let", "while", "if", "else", "return" };
+        public static string[] Statements = {"global", "function", "var", "let", "while", "if", "else", "return" };
         public static string[] VarTypes = { "int", "char", "bool", "array" };
         public static string[] Constants = { "true", "false", "null" };
         public static char[] Operators = new char[] { '*', '+', '-', '/', '<', '>', '&', '=', '|', '!' };

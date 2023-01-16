@@ -16,7 +16,7 @@ namespace SimpleCompiler
         {
             //First, we remove the "return" token
             Token tRet = sTokens.Pop();//return
-           
+
             //Now, we create the correct Expression type based on the top token in the stack
             Expression = Expression.Create(sTokens);
             //We transfer responsibility of the parsing to the created expression
