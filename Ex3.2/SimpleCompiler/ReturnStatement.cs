@@ -14,16 +14,16 @@ namespace SimpleCompiler
         //You need to add here correctness checks. 
         public override void Parse(TokensStack sTokens)
         {
-            //First, we remove the "return" token
-            Token tRet = sTokens.Pop();//return
+            Token t;
 
-            //Now, we create the correct Expression type based on the top token in the stack
+            sTokens.Pop(); // pop the return
+
             Expression = Expression.Create(sTokens);
-            //We transfer responsibility of the parsing to the created expression
             Expression.Parse(sTokens);
-            //After the expression was parsed, we expect to see ;
-            Token tEnd = sTokens.Pop();//;
-
+            
+            t = sTokens.Pop();//;
+            if (t is Separator s1 == false || s1.Name != ';')
+                throw new SyntaxErrorException("expected ;, received " + t, t);
         }
 
         public override string ToString()
