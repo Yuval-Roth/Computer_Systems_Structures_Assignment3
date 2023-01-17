@@ -52,7 +52,7 @@ namespace SimpleCompiler
 
             t = sTokens.Peek();
      
-            if (t is Keyword == false && ((Keyword)t).Name == "else")
+            if (t is Statement && ((Statement)t).Name == "else")
             {
                 sTokens.Pop(); // pop the else
                 
@@ -61,10 +61,9 @@ namespace SimpleCompiler
                 if (t is Parentheses p5 == false || p5.Name != '{')
                     throw new SyntaxErrorException("Expected {, received " + t, t);
 
-                while (sTokens.Peek() is Statement)
+                while (sTokens.Peek() is Statement s1)
                 {
-                    t = sTokens.Pop();
-                    StatetmentBase s = Create(t);
+                    StatetmentBase s = Create(s1);
                     s.Parse(sTokens);
                     DoIfFalse.Add(s);
                 }
