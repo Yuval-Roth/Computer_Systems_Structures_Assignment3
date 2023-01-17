@@ -57,6 +57,9 @@ namespace SimpleCompiler
             if (tArgName is Identifier == false)
                 throw new SyntaxErrorException("Expected identifier, received," + tArgName, tArgName);
 
+            VarDeclaration vc = new VarDeclaration(tArgType, tArgName, false);
+            Args.Add(vc);
+
             //handle the rest of the vars in the declaration, if there are any.
 
             while (sTokens.Peek() is Separator sep && sep.Name == ',')
@@ -71,7 +74,7 @@ namespace SimpleCompiler
                 if (tArgName is Identifier == false)
                     throw new SyntaxErrorException("Expected identifier, received," + tArgName, tArgName);
 
-                VarDeclaration vc = new VarDeclaration(tArgType, tArgName, false);
+                vc = new VarDeclaration(tArgType, tArgName, false);
                 Args.Add(vc);
             }
 
