@@ -95,6 +95,9 @@
     <None Include="Program.Jack">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Program3.Jack">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Program2.Jack">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

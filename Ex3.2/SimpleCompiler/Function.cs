@@ -23,65 +23,85 @@ namespace SimpleCompiler
             Body = new List<StatetmentBase>();
         }
 
-        //This is an example of the implementation of the Parse method 
         public override void Parse(TokensStack sTokens)
         {
-            //We check that the first token is "function"
-            Token tFunc = sTokens.Pop();
-            if (!(tFunc is Statement) || ((Statement)tFunc).Name != "function")
-                throw new SyntaxErrorException("Expected function received: " + tFunc, tFunc);
-            //Now there should be the return type. We pop it from the stack, check for errors, and then set the field
-            Token tType = sTokens.Pop();
-            if(!(tType is VarType))
-                 throw new SyntaxErrorException("Expected var type, received " + tType, tType);
-            ReturnType = VarDeclaration.GetVarType(tType);
-            //Next is the function name
-            Token tName = sTokens.Pop();
-            if(!(tName is Identifier))
-                throw new SyntaxErrorException("Expected function name, received " + tType, tType);
-            Name = ((Identifier)tName).Name;
+            Token t;
+            
+            t = sTokens.Pop(); //function token
+            if (t is Statement s1 == false || s1.Name != "function")
+                throw new SyntaxErrorException("Expected function", t);
+            
+            t = sTokens.Pop(); // return type
+            if (t is VarType == false)
+                throw new SyntaxErrorException("Expected var type, received," + t, t);
+            
+            ReturnType = VarDeclaration.GetVarType(t);
+                     
+            t = sTokens.Pop(); //function name
+            if (t is Identifier i1 == false)
+                throw new SyntaxErrorException("Expected identifier, received," + t, t);
 
-            //After the name there should be opening paranthesis for the arguments
-            Token t = sTokens.Pop(); //(
-            //Now we extract the arguments from the stack until we see a closing parathesis
-            while(sTokens.Count > 0 && !(sTokens.Peek() is Parentheses))//)
+            Name = i1.Name;
+            
+            t = sTokens.Pop(); //(
+            if (t is Parentheses p1 == false || p1.Name != '(')
+                throw new SyntaxErrorException("Expected (, received," + t, t);
+
+            //handle the first var in the declaration
+
+            Token tArgType = sTokens.Pop(); // var type
+            if (tArgType is VarType == false)
+                throw new SyntaxErrorException("Expected var type, received," + tArgType, tArgType);
+
+            Token tArgName = sTokens.Pop(); // var name
+            if (tArgName is Identifier == false)
+                throw new SyntaxErrorException("Expected identifier, received," + tArgName, tArgName);
+
+            //handle the rest of the vars in the declaration, if there are any.
+
+            while (sTokens.Peek() is Separator sep && sep.Name == ',')
             {
-                //For each argument there should be a type, and a name
-                if (sTokens.Count < 3)
-                    throw new SyntaxErrorException("Early termination ", t);
-                Token tArgType = sTokens.Pop();
-                Token tArgName = sTokens.Pop();
+                sTokens.Pop(); // pop the comma
+
+                tArgType = sTokens.Pop(); // var type
+                if (tArgType is VarType == false)
+                    throw new SyntaxErrorException("Expected var type, received," + tArgType, tArgType);
+
+                tArgName = sTokens.Pop(); // var name
+                if (tArgName is Identifier == false)
+                    throw new SyntaxErrorException("Expected identifier, received," + tArgName, tArgName);
+
                 VarDeclaration vc = new VarDeclaration(tArgType, tArgName, false);
                 Args.Add(vc);
-                //If there is a comma, then there is another argument
-                if (sTokens.Count > 0 && sTokens.Peek() is Separator)//,
-                    sTokens.Pop(); 
             }
-            //Now we pop out the ) and the {. Note that you need to check that the stack contains the correct symbols here.
-            t = sTokens.Pop();//)
-            t = sTokens.Pop();//{
 
-            //Now we parse the list of local variable declarations
-            while (sTokens.Count > 0 && (sTokens.Peek() is Statement) && (((Statement)sTokens.Peek()).Name == "var"))
+            t = sTokens.Pop(); // )
+            if (t is Parentheses p2 == false || p2.Name != ')')
+                throw new SyntaxErrorException("Expected ), received," + t, t);
+
+            t = sTokens.Pop(); // {
+            if(t is Parentheses p3 == false || p3.Name != '{')
+                throw new SyntaxErrorException("Expected {, received," + t, t);
+
+            // list of local variable declarations
+            while (sTokens.Peek() is Statement s2 && s2.Name == "var")
             {
                 VarDeclaration local = new VarDeclaration(false);
-                //We call the Parse method of the VarDeclaration, which is responsible to parsing the elements of the variable declaration
                 local.Parse(sTokens);
                 Locals.Add(local);
             }
-
-            //Now we parse the list of statements
-            while (sTokens.Count > 0 && !(sTokens.Peek() is Parentheses))
+            
+            // list of statements
+            while(sTokens.Peek() is Statement s3)
             {
-                //We create the correct Statement type (if, while, return, let) based on the top token in the stack
-                StatetmentBase s = StatetmentBase.Create(sTokens.Peek());
-                //And call the Parse method of the statement to parse the different parts of the statement 
+                StatetmentBase s = StatetmentBase.Create(s3); 
                 s.Parse(sTokens);
                 Body.Add(s);
             }
-            //Need to check here that the last statement is a return statement
-            //Finally, the function should end with }
-            Token tEnd = sTokens.Pop();//}
+            
+            t = sTokens.Pop(); // }
+            if(t is Parentheses p4 == false || p4.Name != '}')
+                throw new SyntaxErrorException("Expected } received " + t, t);
         }
 
         public override string ToString()

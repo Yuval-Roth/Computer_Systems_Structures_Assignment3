@@ -112,8 +112,8 @@ namespace SimpleCompiler
                     continue;
                 }
 
-                Console.WriteLine("   Original line: " + line);
-                Console.Write("Interpreted line: ");
+                //Console.WriteLine("   Original line: " + line);
+                //Console.Write("Interpreted line: ");
 
                 string token = "";
                 int cChars = 0;
@@ -165,11 +165,11 @@ namespace SimpleCompiler
                         }
                     }
                     ch += cChars;
-                    Console.Write(token);
+                    //Console.Write(token);
                 }
                 ln++;
-                Console.WriteLine();
-                Console.WriteLine("================================================================");
+                //Console.WriteLine();
+                //Console.WriteLine("================================================================");
             }
             return lTokens;
         }
