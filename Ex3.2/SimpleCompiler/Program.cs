@@ -69,9 +69,10 @@ namespace SimpleCompiler
                         return false;
                 return true;
         }
-            catch(Exception e)
+            catch(SyntaxErrorException e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
+                Console.WriteLine("bad token: "+e.Token);
             }
             return false;
         }
