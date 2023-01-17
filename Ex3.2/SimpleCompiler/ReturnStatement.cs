@@ -23,6 +23,8 @@ namespace SimpleCompiler
             Expression.Parse(sTokens);
             //After the expression was parsed, we expect to see ;
             Token tEnd = sTokens.Pop();//;
+            if (tEnd is Separator == false || ((Separator)tEnd).Name != ';')
+                throw new SyntaxErrorException("Expected ;, received " + tEnd, tEnd);
 
         }
 
