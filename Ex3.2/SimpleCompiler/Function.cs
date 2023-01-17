@@ -43,14 +43,24 @@ namespace SimpleCompiler
 
             //After the name there should be opening paranthesis for the arguments
             Token t = sTokens.Pop(); //(
+            if (t is Parentheses == false || ((Parentheses)t).Name != '(')
+                throw new SyntaxErrorException("Expected (, received " + t, t);
+
             //Now we extract the arguments from the stack until we see a closing parathesis
-            while(sTokens.Count > 0 && !(sTokens.Peek() is Parentheses))//)
+            while (sTokens.Count > 0 && !(sTokens.Peek() is Parentheses))//)
             {
                 //For each argument there should be a type, and a name
                 if (sTokens.Count < 3)
                     throw new SyntaxErrorException("Early termination ", t);
+                
                 Token tArgType = sTokens.Pop();
+                if (tArgType is VarType == false)
+                    throw new SyntaxErrorException("Expected var type, received " + tArgType, tArgType);
+
                 Token tArgName = sTokens.Pop();
+                if (tArgName is Identifier == false)
+                    throw new SyntaxErrorException("Expected identifier, received " + tArgName, tArgName);
+
                 VarDeclaration vc = new VarDeclaration(tArgType, tArgName, false);
                 Args.Add(vc);
                 //If there is a comma, then there is another argument
@@ -59,7 +69,12 @@ namespace SimpleCompiler
             }
             //Now we pop out the ) and the {. Note that you need to check that the stack contains the correct symbols here.
             t = sTokens.Pop();//)
+            if (t is Parentheses == false || ((Parentheses)t).Name != ')')
+                throw new SyntaxErrorException("Expected ), received " + t, t);
+
             t = sTokens.Pop();//{
+            if (t is Parentheses == false || ((Parentheses)t).Name != '{')
+                throw new SyntaxErrorException("Expected {, received " + t, t);
 
             //Now we parse the list of local variable declarations
             while (sTokens.Count > 0 && (sTokens.Peek() is Statement) && (((Statement)sTokens.Peek()).Name == "var"))
@@ -82,6 +97,8 @@ namespace SimpleCompiler
             //Need to check here that the last statement is a return statement
             //Finally, the function should end with }
             Token tEnd = sTokens.Pop();//}
+            if (tEnd is Parentheses == false || ((Parentheses)tEnd).Name != '}')
+                throw new SyntaxErrorException("Expected }, received " + tEnd, tEnd);
         }
 
         public override string ToString()
