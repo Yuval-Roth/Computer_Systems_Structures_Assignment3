@@ -15,24 +15,40 @@ namespace SimpleCompiler
 
         public override void Parse(TokensStack sTokens)
         {
-            Globals = new List<VarDeclaration>();
-            while ((sTokens.Peek() is Statement) && ((Statement)sTokens.Peek()).Name == "global")
+            try
             {
-                VarDeclaration global = new VarDeclaration(true);
-                global.Parse(sTokens);
-                Globals.Add(global);
+                Globals = new List<VarDeclaration>();
+                while ((sTokens.Peek() is Statement) && ((Statement)sTokens.Peek()).Name == "global")
+                {
+                    VarDeclaration global = new VarDeclaration(true);
+                    global.Parse(sTokens);
+                    Globals.Add(global);
+                }
+                Functions = new List<Function>();
+                while (sTokens.Count > 0)
+                {
+                    if (!(sTokens.Peek() is Statement) || ((Statement)sTokens.Peek()).Name != "function")
+                        throw new SyntaxErrorException("Expected function", sTokens.Peek());
+                    Function f = new Function();
+                    f.Parse(sTokens);
+                    Functions.Add(f);
+                }
+                Main = Functions.Last();
+                Functions.Remove(Main);
             }
-            Functions = new List<Function>();
-            while (sTokens.Count > 0)
+            catch (InvalidOperationException)
             {
-                if (!(sTokens.Peek() is Statement) || ((Statement)sTokens.Peek()).Name != "function")
-                    throw new SyntaxErrorException("Expected function", sTokens.Peek());
-                Function f = new Function();
-                f.Parse(sTokens);
-                Functions.Add(f);
+                if (sTokens.LastPop == null)
+                    throw new SyntaxErrorException("Unexpected end of file", new Token());
+                else throw new SyntaxErrorException("Unexpected end of file", sTokens.LastPop);
             }
-            Main = Functions.Last();
-            Functions.Remove(Main);
+            catch (SyntaxErrorException e)
+            {
+                Token t = e.Token;
+                if (t == null)
+                    throw new SyntaxErrorException(e.Message, new Token());
+                else throw e;
+            }
         }
 
         public override string ToString()
