@@ -26,7 +26,7 @@ namespace SimpleCompiler
         {
             Token t = m_sTokens.Pop();
             LastPop = t;
-            return t;
+            return t; 
         }
         public Token Peek()
         {

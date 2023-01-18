@@ -46,7 +46,7 @@ namespace SimpleCompiler
             //try
             //{
                 Compiler sc = new Compiler();
-                List<string> lLines = sc.ReadFile(@"Program2.Jack");
+                List<string> lLines = sc.ReadFile(@"Program3.Jack");
                 List<Token> lTokens = sc.Tokenize(lLines);
                 TokensStack sTokens = new TokensStack();
                 for (int i = lTokens.Count - 1; i >= 0; i--)
